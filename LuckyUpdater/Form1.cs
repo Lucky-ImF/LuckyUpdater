@@ -307,13 +307,13 @@ namespace LuckyUpdater
                         UpdateStats.Text = "Speed: 0 B/s | 0 B / 0 B | Time Left: 00:00:00";
                         Application.DoEvents();
                             
-                        //while(WaitForFile(FileName, FileMode.Open, FileAccess.Read, FileShare.Read) == false)
                         while (IsFileLocked(new FileInfo(FileName)))
                         {
                             await Task.Delay(100);
                         }
                         await ZipFile.ExtractToDirectoryAsync(FileName, Application.StartupPath, true);
                         UpdateStatus.Text = "Finalizing...";
+
                         // Clean up
                         if (File.Exists(FileName))
                         {
@@ -351,29 +351,6 @@ namespace LuckyUpdater
             }
 
             return string.Format("{0:0.##} {1}", bytes, suffixes[suffixIndex]);
-        }
-
-        bool WaitForFile(string fullPath, FileMode mode, FileAccess access, FileShare share)
-        {
-            for (int numTries = 0; numTries < 10; numTries++)
-            {
-                FileStream fs = null;
-                try
-                {
-                    fs = new FileStream(fullPath, mode, access, share);
-                    fs.Dispose();
-                    return true;
-                }
-                catch (IOException)
-                {
-                    if (fs != null)
-                    {
-                        fs.Dispose();
-                    }
-                    Thread.Sleep(50);
-                }
-            }
-            return false;
         }
 
         private bool IsFileLocked(FileInfo file)
