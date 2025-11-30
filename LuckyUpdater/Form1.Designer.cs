@@ -38,6 +38,7 @@
             pictureBox2 = new PictureBox();
             ErrorLabel = new Label();
             UpdateInfoMissingPanel = new Panel();
+            SupportLinkLL = new LinkLabel();
             UpdatePanel = new Panel();
             UpdateStatus = new Label();
             PromoLink = new LinkLabel();
@@ -152,12 +153,28 @@
             // 
             // UpdateInfoMissingPanel
             // 
+            UpdateInfoMissingPanel.Controls.Add(SupportLinkLL);
             UpdateInfoMissingPanel.Controls.Add(pictureBox2);
             UpdateInfoMissingPanel.Controls.Add(ErrorLabel);
             UpdateInfoMissingPanel.Location = new Point(61, 76);
             UpdateInfoMissingPanel.Name = "UpdateInfoMissingPanel";
-            UpdateInfoMissingPanel.Size = new Size(678, 327);
+            UpdateInfoMissingPanel.Size = new Size(678, 335);
             UpdateInfoMissingPanel.TabIndex = 6;
+            // 
+            // SupportLinkLL
+            // 
+            SupportLinkLL.ActiveLinkColor = Color.White;
+            SupportLinkLL.LinkColor = Color.FromArgb(128, 255, 255);
+            SupportLinkLL.Location = new Point(3, 310);
+            SupportLinkLL.Name = "SupportLinkLL";
+            SupportLinkLL.Size = new Size(672, 15);
+            SupportLinkLL.TabIndex = 13;
+            SupportLinkLL.TabStop = true;
+            SupportLinkLL.Text = "SUPPORT LINK";
+            SupportLinkLL.TextAlign = ContentAlignment.MiddleCenter;
+            SupportLinkLL.Visible = false;
+            SupportLinkLL.VisitedLinkColor = Color.FromArgb(128, 255, 255);
+            SupportLinkLL.LinkClicked += SupportLink_LinkClicked;
             // 
             // UpdatePanel
             // 
@@ -264,7 +281,8 @@
             // 
             // UpdateLogo
             // 
-            UpdateLogo.ImageLocation = "C:\\Users\\gokar\\Pictures\\WSMM\\WLMM_Icon.png";
+            UpdateLogo.Image = Properties.Resources.LuckyUpdaterIcon_512;
+            UpdateLogo.ImageLocation = "";
             UpdateLogo.Location = new Point(15, 8);
             UpdateLogo.Name = "UpdateLogo";
             UpdateLogo.Size = new Size(300, 295);
@@ -337,5 +355,6 @@
         private ProgressBar UpdateProgressBar;
         private Label UpdateVersion;
         private Label UpdateStatus;
+        private LinkLabel SupportLinkLL;
     }
 }

@@ -161,8 +161,11 @@ namespace LuckyUpdater
                             break;
                         case "SupportLink":
                             SupportLink = value;
+                            SupportLinkLL.Text = value;
+                            SupportLinkLL.Visible = true;
                             break;
                         case "RemoveFiles":
+                            // Files to remove should be separated by colons (:)
                             RemoveFiles = value;
                             break;
                         case "SelfDestruct":
@@ -177,6 +180,10 @@ namespace LuckyUpdater
                 }
 
                 //Check if mandatory data is present
+                if (UpdateButton.Tag == null || FileName == "")
+                {
+                    ErrorMessage = "Misconfigured UpdateData.ini file.";
+                }
 
                 if (string.IsNullOrEmpty(ErrorMessage))
                 {
@@ -306,13 +313,13 @@ namespace LuckyUpdater
                         UpdateStatus.Text = "Extracting Update...";
                         UpdateStats.Text = "Speed: 0 B/s | 0 B / 0 B | Time Left: 00:00:00";
                         Application.DoEvents();
-                            
+
                         while (IsFileLocked(new FileInfo(FileName)))
                         {
                             await Task.Delay(100);
                         }
                         await ZipFile.ExtractToDirectoryAsync(FileName, Application.StartupPath, true);
-                        UpdateStatus.Text = "Finalizing...";
+                        UpdateStatus.Text = "Cleaning Up...";
 
                         // Clean up
                         if (File.Exists(FileName))
@@ -324,6 +331,27 @@ namespace LuckyUpdater
                             if (File.Exists("UpdateData.ini"))
                             {
                                 File.Delete("UpdateData.ini");
+                            }
+                        }
+
+                        // Remove specified files
+                        if (!string.IsNullOrEmpty(RemoveFiles))
+                        {
+                            string[] filesToRemove = RemoveFiles.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (string filePath in filesToRemove)
+                            {
+                                string trimmedPath = filePath.Trim();
+                                if (File.Exists(trimmedPath))
+                                {
+                                    try
+                                    {
+                                        File.Delete(trimmedPath);
+                                    }
+                                    catch
+                                    {
+                                        // Log or handle the error if needed
+                                    }
+                                }
                             }
                         }
                         UpdateStatus.Text = "Update Complete!";
@@ -373,6 +401,11 @@ namespace LuckyUpdater
 
             //file is not locked
             return false;
+        }
+
+        private void SupportLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("explorer", SupportLinkLL.Text);
         }
     }
 }
