@@ -347,10 +347,15 @@ namespace LuckyUpdater
                                     {
                                         File.Delete(trimmedPath);
                                     }
-                                    catch
+                                    catch {}
+                                }
+                                else if (Directory.Exists(trimmedPath))
+                                {
+                                    try
                                     {
-                                        // Log or handle the error if needed
+                                        Directory.Delete(trimmedPath, true);
                                     }
+                                    catch {}
                                 }
                             }
                         }
