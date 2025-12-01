@@ -214,7 +214,12 @@ namespace LuckyUpdater
                 {
                     try
                     {
-                        Process.Start("explorer", LaunchEXE);
+                        using (Process p = new Process())
+                        {
+                            p.StartInfo = new ProcessStartInfo(LaunchEXE) { UseShellExecute = true };
+                            p.StartInfo.WorkingDirectory = Application.StartupPath;
+                            p.Start();
+                        }
                         Application.Exit();
                     }
                     catch
